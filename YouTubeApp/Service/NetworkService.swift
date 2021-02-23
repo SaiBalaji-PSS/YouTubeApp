@@ -8,7 +8,13 @@
 import Foundation
 
 
+
+protocol ModelDelegate {
+    func videosFetched(videos: [Video])
+}
 class NetworkService{
+    
+    var delegate: ModelDelegate?
     
     static var sharedObj = NetworkService()
     
@@ -24,8 +30,17 @@ class NetworkService{
             DispatchQueue.main.async {
                 if let d = data
                 {
-                  print(d)
+                   let decoder = JSONDecoder()
+                    do
+                    {
+                        let info = try decoder.decode(Response.self, from: d)
+                        self.delegate?.videosFetched(videos: info.items!)
+                    }
                     
+                    catch
+                    {
+                        print(error)
+                    }
                 }
                 
                 
