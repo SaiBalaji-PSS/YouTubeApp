@@ -9,14 +9,15 @@ import UIKit
 
 class ViewController: UIViewController,ModelDelegate,UITableViewDataSource,UITableViewDelegate {
   
-    var vid = ""
+    var vid: Video!
     
     @IBOutlet weak var videoTV: UITableView!
     var videoarray = [Video]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        title = "Home"
+        
         NetworkService.sharedObj.delegate = self
         NetworkService.sharedObj.getVideos()
         videoTV.delegate = self
@@ -47,7 +48,7 @@ class ViewController: UIViewController,ModelDelegate,UITableViewDataSource,UITab
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        vid = videoarray[indexPath.row].videoId
+        vid = videoarray[indexPath.row]
         
         performSegue(withIdentifier: "segue", sender: self)
     }
@@ -56,7 +57,7 @@ class ViewController: UIViewController,ModelDelegate,UITableViewDataSource,UITab
         
         if let destination = segue.destination as? DetailVC
         {
-            destination.videoId = vid
+            destination.video = vid
         }
         
     }
